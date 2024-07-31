@@ -250,6 +250,16 @@ class AsyncClient(Client):
     async def __aexit__(self, exc_type=None, exc_value=None, traceback=None) -> None:
         await self.transport.aclose()
 
+    async def create_message(self, service, operation_name, *args, **kwargs):
+        """Create the payload for the given operation.
+
+        :rtype: lxml.etree._Element
+
+        """
+        envelope, http_headers = await service._binding._create_async(
+            operation_name, args, kwargs, client=self
+        )
+        return envelope
 
 class CachingClient(Client):
     """Shortcut to create a caching client, for the lazy people.
