@@ -250,6 +250,22 @@ class AsyncClient(Client):
     async def __aexit__(self, exc_type=None, exc_value=None, traceback=None) -> None:
         await self.transport.aclose()
 
+    def create_service(self, binding_name, address):
+        """Create a new AsyncServiceProxy for the given binding name and address.
+
+        :param binding_name: The QName of the binding
+        :param address: The address of the endpoint
+
+        """
+        try:
+            binding = self.wsdl.bindings[binding_name]
+        except KeyError:
+            raise ValueError(
+                "No binding found with the given QName. Available bindings "
+                "are: %s" % (", ".join(self.wsdl.bindings.keys()))
+            )
+        return AsyncServiceProxy(self, binding, address=address)
+
     async def create_message(self, service, operation_name, *args, **kwargs):
         """Create the payload for the given operation.
 
