@@ -61,7 +61,7 @@ def apply_ingress(client, envelope, http_headers, operation):
 
 async def apply_ingress_async(client, envelope, http_headers, operation):
     for plugin in client.plugins:
-        if iscoroutinefunction(plugin.egress):
+        if iscoroutinefunction(plugin.ingress):
             result = await plugin.ingress(envelope, http_headers, operation)
         else:
             result = plugin.ingress(envelope, http_headers, operation)
