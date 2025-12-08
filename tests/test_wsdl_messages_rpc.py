@@ -1,4 +1,3 @@
-import io
 from io import StringIO
 
 from tests.utils import DummyTransport, assert_nodes_equal, load_xml
@@ -216,7 +215,7 @@ def test_wsdl_array_of_simple_types():
     transport = DummyTransport()
     transport.bind(
         "http://schemas.xmlsoap.org/soap/encoding/",
-        load_xml(io.open("tests/wsdl_files/soap-enc.xsd", "r").read().encode("utf-8")),
+        load_xml(open("tests/wsdl_files/soap-enc.xsd").read().encode("utf-8")),
     )
     root = wsdl.Document(wsdl_content, transport)
 
