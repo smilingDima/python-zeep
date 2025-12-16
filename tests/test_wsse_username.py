@@ -85,7 +85,6 @@ def test_password_text():
     assert_nodes_equal(envelope, expected)
 
 
-@pytest.mark.network
 @freeze_time("2016-05-08 12:00:00")
 def test_password_digest(monkeypatch):
     monkeypatch.setattr(os, "urandom", lambda x: b"mocked-random")
@@ -139,7 +138,6 @@ def test_password_digest(monkeypatch):
     assert_nodes_equal(envelope, expected)
 
 
-@pytest.mark.network
 @freeze_time("2016-05-08 12:00:00")
 def test_password_digest_custom(monkeypatch):
     monkeypatch.setattr(os, "urandom", lambda x: b"mocked-random")
@@ -325,7 +323,6 @@ def test_timestamp_token():
     assert_nodes_equal(envelope, expected)
 
 
-@pytest.mark.network
 @freeze_time("2016-05-08 12:00:00")
 def test_bytes_like_password_digest(monkeypatch):
     monkeypatch.setattr(os, "urandom", lambda x: b"mocked-random")

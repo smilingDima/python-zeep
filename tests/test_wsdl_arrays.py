@@ -1,3 +1,5 @@
+import io
+
 import pytest
 from lxml import etree
 
@@ -10,7 +12,7 @@ def transport():
     transport = DummyTransport()
     transport.bind(
         "http://schemas.xmlsoap.org/soap/encoding/",
-        load_xml(open("tests/wsdl_files/soap-enc.xsd").read().encode("utf-8")),
+        load_xml(io.open("tests/wsdl_files/soap-enc.xsd", "r").read().encode("utf-8")),
     )
     return transport
 
@@ -320,7 +322,7 @@ def test_soap_array_parse_remote_ns():
     transport = DummyTransport()
     transport.bind(
         "http://schemas.xmlsoap.org/soap/encoding/",
-        load_xml(open("tests/wsdl_files/soap-enc.xsd").read().encode("utf-8")),
+        load_xml(io.open("tests/wsdl_files/soap-enc.xsd", "r").read().encode("utf-8")),
     )
 
     schema = xsd.Schema(
@@ -390,7 +392,7 @@ def test_wsdl_array_type():
     transport = DummyTransport()
     transport.bind(
         "http://schemas.xmlsoap.org/soap/encoding/",
-        load_xml(open("tests/wsdl_files/soap-enc.xsd").read().encode("utf-8")),
+        load_xml(io.open("tests/wsdl_files/soap-enc.xsd", "r").read().encode("utf-8")),
     )
 
     schema = xsd.Schema(
@@ -464,7 +466,7 @@ def test_soap_array_parse():
     transport = DummyTransport()
     transport.bind(
         "http://schemas.xmlsoap.org/soap/encoding/",
-        load_xml(open("tests/wsdl_files/soap-enc.xsd").read().encode("utf-8")),
+        load_xml(io.open("tests/wsdl_files/soap-enc.xsd", "r").read().encode("utf-8")),
     )
 
     schema = xsd.Schema(

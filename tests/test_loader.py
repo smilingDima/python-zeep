@@ -1,4 +1,5 @@
 import pytest
+from pytest import raises as assert_raises
 
 from tests.utils import DummyTransport
 from zeep.exceptions import DTDForbidden, EntitiesForbidden

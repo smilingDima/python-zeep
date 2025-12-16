@@ -1,8 +1,10 @@
 import asyncio
+import httpx
 import time
 
 import zeep
 
+from zeep.transports import AsyncTransport
 
 
 def run_async():

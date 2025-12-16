@@ -1,3 +1,5 @@
+import io
+
 import pytest
 from lxml import etree
 
@@ -1019,7 +1021,7 @@ def test_xml_namespace():
 
 
 def test_auto_import_known_schema():
-    content = open("tests/wsdl_files/soap-enc.xsd", "rb").read()
+    content = io.open("tests/wsdl_files/soap-enc.xsd", "rb").read()
 
     transport = DummyTransport()
     transport.bind("http://schemas.xmlsoap.org/soap/encoding/", content)

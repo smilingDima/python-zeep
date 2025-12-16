@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from requests import Session
 from requests.auth import HTTPBasicAuth
 

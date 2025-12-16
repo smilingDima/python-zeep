@@ -1,6 +1,6 @@
 import logging
 import os
-from contextlib import closing, contextmanager
+from contextlib import contextmanager
 from urllib.parse import urlparse
 
 import requests
@@ -16,16 +16,6 @@ try:
 except ImportError:
     httpx = None
 
-try:
-    from packaging.version import Version
-
-    if httpx is None or Version(httpx.__version__) < Version("0.26.0"):
-        HTTPX_PROXY_KWARG_NAME = "proxies"
-    else:
-        HTTPX_PROXY_KWARG_NAME = "proxy"
-except ImportError:
-    Version = None
-    HTTPX_PROXY_KWARG_NAME = None
 
 __all__ = ["AsyncTransport", "Transport"]
 
@@ -47,7 +37,7 @@ class Transport:
         self.operation_timeout = operation_timeout
         self.logger = logging.getLogger(__name__)
 
-        self._close_session = not session
+        self.__close_session = not session
         self.session = session or requests.Session()
         self.session.mount("file://", FileAdapter())
         self.session.headers["User-Agent"] = "Zeep/%s (www.python-zeep.org)" % (
@@ -124,6 +114,7 @@ class Transport:
 
         scheme = urlparse(url).scheme
         if scheme in ("http", "https", "file"):
+
             if self.cache:
                 response = self.cache.get(url)
                 if response:
@@ -142,9 +133,8 @@ class Transport:
     def _load_remote_data(self, url):
         self.logger.debug("Loading remote data from: %s", url)
         response = self.session.get(url, timeout=self.load_timeout)
-        with closing(response):
-            response.raise_for_status()
-            return response.content
+        response.raise_for_status()
+        return response.content
 
     @contextmanager
     def settings(self, timeout=None):
@@ -166,7 +156,7 @@ class Transport:
         self.operation_timeout = old_timeout
 
     def __del__(self):
-        if self._close_session:
+        if self.__close_session:
             self.session.close()
 
 
@@ -188,24 +178,19 @@ class AsyncTransport(Transport):
         verify_ssl=True,
         proxy=None,
     ):
-        if httpx is None or HTTPX_PROXY_KWARG_NAME is None:
-            raise RuntimeError(
-                "To use AsyncTransport, install zeep with the async extras, "
-                "e.g., `pip install zeep[async]`"
-            )
+        if httpx is None:
+            raise RuntimeError("The AsyncTransport is based on the httpx module")
 
-        self._close_session = False
         self.cache = cache
-        proxy_kwargs = {HTTPX_PROXY_KWARG_NAME: proxy}
         self.wsdl_client = wsdl_client or httpx.Client(
             verify=verify_ssl,
+            proxies=proxy,
             timeout=timeout,
-            **proxy_kwargs,
         )
         self.client = client or httpx.AsyncClient(
             verify=verify_ssl,
+            proxies=proxy,
             timeout=operation_timeout,
-            **proxy_kwargs,
         )
         self.logger = logging.getLogger(__name__)
 
@@ -225,7 +210,7 @@ class AsyncTransport(Transport):
 
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError:
+        except httpx.HTTPStatusError as exc:
             raise TransportError(status_code=response.status_code)
         return result
 

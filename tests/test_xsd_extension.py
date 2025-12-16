@@ -1,4 +1,5 @@
 import datetime
+import io
 
 from lxml import etree
 
@@ -436,7 +437,9 @@ def test_issue_221():
     transport.bind(
         "https://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd",
         load_xml(
-            open("tests/wsdl_files/xmldsig-core-schema.xsd").read().encode("utf-8")
+            io.open("tests/wsdl_files/xmldsig-core-schema.xsd", "r")
+            .read()
+            .encode("utf-8")
         ),
     )
 

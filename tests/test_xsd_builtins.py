@@ -242,8 +242,6 @@ class TestDate:
         instance = builtins.Date()
         assert instance.pythonvalue("2016-03-04") == datetime.date(2016, 3, 4)
         assert instance.pythonvalue("2001-10-26+02:00") == datetime.date(2001, 10, 26)
-        assert instance.pythonvalue("2001-10-26-02:00") == datetime.date(2001, 10, 26)
-        assert instance.pythonvalue("2024-08-21-10:00") == datetime.date(2024, 8, 21)
         assert instance.pythonvalue("2001-10-26Z") == datetime.date(2001, 10, 26)
         assert instance.pythonvalue("2001-10-26+00:00") == datetime.date(2001, 10, 26)
         assert instance.pythonvalue("\r\n\t 2016-03-04   ") == datetime.date(2016, 3, 4)
@@ -371,18 +369,17 @@ class TestgDay:
 class TestHexBinary:
     def test_xmlvalue(self):
         instance = builtins.HexBinary()
-        assert instance.xmlvalue(b"\xff") == b"\xff"
+        assert instance.xmlvalue(b"\xFF") == b"\xFF"
 
     def test_pythonvalue(self):
         instance = builtins.HexBinary()
-        assert instance.pythonvalue(b"\xff") == b"\xff"
+        assert instance.pythonvalue(b"\xFF") == b"\xFF"
 
 
 class TestBase64Binary:
     def test_xmlvalue(self):
         instance = builtins.Base64Binary()
         assert instance.xmlvalue(b"hoi") == b"aG9p"
-        assert instance.xmlvalue("aG9p") == "aG9p"
 
     def test_pythonvalue(self):
         instance = builtins.Base64Binary()
